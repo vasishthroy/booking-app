@@ -39,7 +39,11 @@ func main() {
 	var emailAddress string
 	var userTickets int
 
-	// Infinite for loop
+	// A for loop executes until the condition for the loop is satisfied
+	// eg. for  userTickets <= 0 {}
+	// Infinite for loop can be implemented in two ways
+	// 1) for true {}
+	// 2) for {}
 	for {
 		// Ask user their name
 		// Scan is used to get input, it takes a pointer as an argument
@@ -56,42 +60,53 @@ func main() {
 		fmt.Print("Enter the number of tickets you need to book: ")
 		fmt.Scan(&userTickets)
 
-		remainingTickets = remainingTickets - uint(userTickets)
-		// bookings[0] = firstName + " " + lastName
-		// Slice uses the built-in append function to append data to it
-		bookings = append(bookings, firstName+" "+lastName)
+		if remainingTickets > uint(userTickets) {
+			remainingTickets = remainingTickets - uint(userTickets)
+			// bookings[0] = firstName + " " + lastName
+			// Slice uses the built-in append function to append data to it
+			bookings = append(bookings, firstName+" "+lastName)
 
-		// Check for the array or slice data logged
-		/*
-			fmt.Printf("Array / Slice: %v\n", bookings)
-			fmt.Printf("Array / Slice first element: %v\n", bookings[0])
-			fmt.Printf("Array / Slice type: %T\n", bookings)
-			fmt.Printf("Array / Slice length: %v\n", len(bookings))
-		*/
+			// Check for the array or slice data logged
+			/*
+				fmt.Printf("Array / Slice: %v\n", bookings)
+				fmt.Printf("Array / Slice first element: %v\n", bookings[0])
+				fmt.Printf("Array / Slice type: %T\n", bookings)
+				fmt.Printf("Array / Slice length: %v\n", len(bookings))
+			*/
 
-		// Ask for users name and no. of tickets
-		fmt.Printf("Thank you %v %v for booking %v tickets. ",
-			firstName, lastName, userTickets)
-		fmt.Printf("You will receive a confirmation on %v soon.\n",
-			emailAddress)
-		fmt.Printf("Remaining tickets: %v", remainingTickets)
+			// Ask for users name and no. of tickets
+			fmt.Printf("Thank you %v %v for booking %v tickets. ",
+				firstName, lastName, userTickets)
+			fmt.Printf("You will receive a confirmation on %v soon.\n",
+				emailAddress)
+			fmt.Printf("Remaining tickets: %v\n", remainingTickets)
 
-		var firstNames []string
+			var firstNames []string
 
-		// Iterative for loop
-		// range lets us iterate over elements
-		// for slices and array it provides index and element
-		// Go interprets "_" as an unused variable
-		for _, name := range bookings {
+			// Iterative for loop
+			// range lets us iterate over elements
+			// for slices and array it provides index and element
+			// Go interprets "_" (blank identifier)  as an unused variable
+			for _, name := range bookings {
 
-			// stings module has a method called Fields
-			// It splits the string based on white spaces available
-			var firstName = strings.Fields(name)
-			firstNames = append(firstNames, firstName[0])
+				// stings module has a method called Fields
+				// It splits the string based on white spaces available
+				var firstName = strings.Fields(name)
+				firstNames = append(firstNames, firstName[0])
+			}
+
+			fmt.Printf("This is all our current booking: %v\n", firstNames)
+
+		} else if remainingTickets == uint(userTickets) {
+			fmt.Println("Thanks you have booked the all our remaining tickets.")
+			fmt.Println("Enjoy the show :)")
+			break
+
+		} else {
+			fmt.Printf("We do not have %v ticket. ", userTickets)
+			fmt.Printf("Remaining Ticket Count: %v\n", remainingTickets)
+			continue
 		}
-
-		fmt.Printf("This is all our current booking: %v\n", firstNames)
-
 	}
 
 }
