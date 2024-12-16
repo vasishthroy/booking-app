@@ -27,40 +27,22 @@ func main() {
 	// based on the amount of value being stored
 	var bookings []string
 
-	// Println ends with a \n
-	fmt.Println("Welcome to our", conferenceName, "booking application")
-	// "Printf" is Print with format option for adding variables
-	// to display variables with the print text
-	fmt.Printf("We have a total of %v tickets and %v are remaining\n", conferenceTickets, remainingTickets)
-	fmt.Println("Get your tickets here to attend")
-
-	var firstName string
-	var lastName string
-	var emailAddress string
-	var userTickets int
+	greetUser(conferenceName, conferenceTickets, remainingTickets)
 
 	// A for loop executes until the condition for the loop is satisfied
-	// eg. for  userTickets <= 0 {}
+	// eg. for userTickets <= 0 {}
 	// Infinite for loop can be implemented in two ways
 	// 1) for true {}
 	// 2) for {}
 	for {
-		// Ask user their name
-		// Scan is used to get input, it takes a pointer as an argument
-		// It uses that pointer to assign value to the pointed variable
-		fmt.Print("Please enter your first name: ")
-		fmt.Scan(&firstName)
 
-		fmt.Print("Please enter your last name: ")
-		fmt.Scan(&lastName)
+		firstName, lastName, emailAddress, userTickets := getUserInput()
 
-		fmt.Print("Please enter your email: ")
-		fmt.Scan(&emailAddress)
+		isValidName := len(firstName) > 2 && len(lastName) > 2
+		isValidEmail := strings.Contains(emailAddress, "@")
+		isValidTicketNumber := userTickets > 0 && remainingTickets >= uint(userTickets)
 
-		fmt.Print("Enter the number of tickets you need to book: ")
-		fmt.Scan(&userTickets)
-
-		if remainingTickets > uint(userTickets) {
+		if isValidName && isValidEmail && isValidTicketNumber {
 			remainingTickets = remainingTickets - uint(userTickets)
 			// bookings[0] = firstName + " " + lastName
 			// Slice uses the built-in append function to append data to it
@@ -97,16 +79,59 @@ func main() {
 
 			fmt.Printf("This is all our current booking: %v\n", firstNames)
 
-		} else if remainingTickets == uint(userTickets) {
-			fmt.Println("Thanks you have booked the all our remaining tickets.")
-			fmt.Println("Enjoy the show :)")
-			break
+			if remainingTickets == 0 {
+				fmt.Println("Thanks you have booked the all our remaining tickets.")
+				fmt.Println("Enjoy the show :)")
+				break
+			}
 
 		} else {
-			fmt.Printf("We do not have %v ticket. ", userTickets)
-			fmt.Printf("Remaining Ticket Count: %v\n", remainingTickets)
+			if !isValidName {
+				fmt.Printf("Invalid first and last name\n")
+			}
+
+			if !isValidEmail {
+				fmt.Printf("Invalid email format\n")
+			}
+
+			if !isValidTicketNumber {
+				fmt.Printf("We do not have %v ticket. ", userTickets)
+				fmt.Printf("Remaining Ticket Count: %v\n", remainingTickets)
+			}
 			continue
 		}
 	}
 
+}
+
+func greetUser(confName string, confTickets int, remainingTickets uint) {
+	// Println ends with a \n
+	fmt.Println("Welcome to our", confName, "booking application")
+	// "Printf" is Print with format option for adding variables
+	// to display variables with the print text
+	fmt.Printf("We have a total of %v tickets and %v are remaining\n", confTickets, remainingTickets)
+	fmt.Println("Get your tickets here to attend")
+}
+
+func getUserInput() (string, string, string, int) {
+	var firstName string
+	var lastName string
+	var emailAddress string
+	var userTickets int
+	// Ask user their name
+	// Scan is used to get input, it takes a pointer as an argument
+	// It uses that pointer to assign value to the pointed variable
+	fmt.Print("Please enter your first name: ")
+	fmt.Scan(&firstName)
+
+	fmt.Print("Please enter your last name: ")
+	fmt.Scan(&lastName)
+
+	fmt.Print("Please enter your email: ")
+	fmt.Scan(&emailAddress)
+
+	fmt.Print("Enter the number of tickets you need to book: ")
+	fmt.Scan(&userTickets)
+
+	return firstName, lastName, emailAddress, userTickets
 }
