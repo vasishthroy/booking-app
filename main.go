@@ -27,7 +27,7 @@ func main() {
 	// based on the amount of value being stored
 	var bookings []string
 
-	greetUser(conferenceName, conferenceTickets, remainingTickets)
+	greetUser(conferenceName, conferenceTickets)
 
 	// A for loop executes until the condition for the loop is satisfied
 	// eg. for userTickets <= 0 {}
@@ -38,9 +38,11 @@ func main() {
 
 		firstName, lastName, emailAddress, userTickets := getUserInput()
 
-		isValidName := len(firstName) > 2 && len(lastName) > 2
-		isValidEmail := strings.Contains(emailAddress, "@")
-		isValidTicketNumber := userTickets > 0 && remainingTickets >= uint(userTickets)
+		var isValidName, isValidEmail, isValidTicketNumber bool = validateInput(firstName,
+			lastName,
+			emailAddress,
+			userTickets,
+			remainingTickets)
 
 		if isValidName && isValidEmail && isValidTicketNumber {
 			remainingTickets = remainingTickets - uint(userTickets)
@@ -98,21 +100,31 @@ func main() {
 				fmt.Printf("We do not have %v ticket. ", userTickets)
 				fmt.Printf("Remaining Ticket Count: %v\n", remainingTickets)
 			}
+
 			continue
 		}
 	}
-
 }
 
-func greetUser(confName string, confTickets int, remainingTickets uint) {
+func greetUser(confName string, confTickets int) {
+	/**
+	This function is used ot print the greeting and information message
+	it takes 3 arguments
+	confName (string): The name of the conference for which the ticket is being sold.
+	confTickets (int): Total number of tickets that are available for booking.
+	**/
+
 	// Println ends with a \n
 	fmt.Println("Welcome to our", confName, "booking application")
 	// "Printf" is Print with format option for adding variables
 	// to display variables with the print text
-	fmt.Printf("We have a total of %v tickets and %v are remaining\n", confTickets, remainingTickets)
+	fmt.Printf("We have a total of %v tickets\n", confTickets)
 	fmt.Println("Get your tickets here to attend")
 }
 
+// Functions in go can return multiple values
+// Although for returning multiple function it needs to be defined
+// SYNTAX: func functionName() (return datatype1, return datatype2, ...) {}
 func getUserInput() (string, string, string, int) {
 	var firstName string
 	var lastName string
@@ -134,4 +146,21 @@ func getUserInput() (string, string, string, int) {
 	fmt.Scan(&userTickets)
 
 	return firstName, lastName, emailAddress, userTickets
+}
+
+func validateInput(firstName string, lastName string, emailId string, ticketNeeded int, ticketRemaining uint) (bool, bool, bool) {
+	/*
+		Check if user has not provided invalid data
+		It takes 5 arguments
+		firstName (string): First name input by user.
+		lastName (string): Last name input by user.
+		emailId (string): Email id input by user.
+		ticketNeeded (int): Number of ticket user needs to book.
+		ticketRemaining (uint): Available tickets from which user can book.
+	*/
+
+	isValidName := len(firstName) > 2 && len(lastName) > 2
+	isValidEmail := strings.Contains(emailId, "@")
+	isValidTicketNumber := ticketNeeded > 0 && ticketRemaining >= uint(ticketNeeded)
+	return isValidName, isValidEmail, isValidTicketNumber
 }
