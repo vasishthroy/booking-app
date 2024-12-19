@@ -1,6 +1,7 @@
 package main
 
 import (
+	"booking-app/helper"
 	"fmt"
 	"strings"
 )
@@ -10,6 +11,9 @@ import (
 const conferenceTickets = 50
 
 var conferenceName = "Go conference"
+
+// Making the first letter capital converts the variable into a global variable
+// Global variables are accessible across the module or different scripts
 var remainingTickets uint = conferenceTickets
 
 // Using array to store the data of users booking the ticket
@@ -45,7 +49,7 @@ func main() {
 		// Check for any invalid details provided by user
 		var isValidName,
 			isValidEmail,
-			isValidTicketNumber bool = validateInput(firstName, lastName, emailAddress, userTickets)
+			isValidTicketNumber bool = helper.ValidateInput(firstName, lastName, emailAddress, userTickets, remainingTickets)
 
 		if isValidName && isValidEmail && isValidTicketNumber {
 
@@ -128,24 +132,6 @@ func getUserInput() (string, string, string, int) {
 	return firstName, lastName, emailAddress, userTickets
 }
 
-func validateInput(firstName string, lastName string, emailId string, ticketNeeded int) (bool, bool, bool) {
-	/*
-		Check if user has not provided invalid data
-		Arguments:
-			firstName (string): First name of the user.
-			lastName (string): Last name of the user.
-			emailId (string): Email id of the user.
-			ticketNeeded (int): No. of ticket user needs.
-		Return type: bool, bool and bool
-
-	*/
-
-	isValidName := len(firstName) > 2 && len(lastName) > 2
-	isValidEmail := strings.Contains(emailId, "@")
-	isValidTicketNumber := ticketNeeded > 0 && remainingTickets >= uint(ticketNeeded)
-	return isValidName, isValidEmail, isValidTicketNumber
-}
-
 func bookTickets(firstName string, lastName string, emailId string, userTickets int) {
 	/*
 		This function is used to log the booking done by the user.
@@ -202,5 +188,6 @@ func getFirstNames(firstNames []string) []string {
 		var firstName = strings.Fields(name)
 		firstNames = append(firstNames, firstName[0])
 	}
+
 	return firstNames
 }
