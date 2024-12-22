@@ -3,7 +3,7 @@ package main
 import (
 	"booking-app/helper"
 	"fmt"
-	"strings"
+	"strconv"
 )
 
 // Declaring variables outside the main function
@@ -30,7 +30,10 @@ var remainingTickets uint = conferenceTickets
 // If the size is kept blank then it becomes a Slice
 // They are more efficient than arrays as they automatically allocate memory
 // based on the amount of value being stored
-var bookings []string
+// Example of simple slice of string dtype
+// var bookings []string
+// TODO add Descriptive comments for MAPs
+var bookings = make([]map[string]string, 0)
 
 func main() {
 
@@ -147,9 +150,17 @@ func bookTickets(firstName string, lastName string, emailId string, userTickets 
 
 	remainingTickets = remainingTickets - uint(userTickets)
 
+	userData := make(map[string]string)
+
+	userData["firstName"] = firstName
+	userData["lastName"] = lastName
+	userData["email"] = emailId
+
+	userData["ticketBooked"] = strconv.Itoa(userTickets)
+
 	// bookings[0] = firstName + " " + lastName
 	// Slice uses the built-in append function to append data to it
-	bookings = append(bookings, firstName+" "+lastName)
+	bookings = append(bookings, userData)
 
 	// Check for the array or slice data logged
 	/*
@@ -167,6 +178,7 @@ func bookTickets(firstName string, lastName string, emailId string, userTickets 
 }
 
 func getFirstNames(firstNames []string) []string {
+	// func getFirstNames(firstNames []string) []string {
 
 	/*
 		This function splits the names present inside the booking slice
@@ -181,12 +193,13 @@ func getFirstNames(firstNames []string) []string {
 	// range lets us iterate over elements
 	// for slices and array it provides index and element
 	// Go interprets "_" (blank identifier)  as an unused variable
-	for _, name := range bookings {
+	for _, booking := range bookings {
 
-		// stings module has a method called Fields
-		// It splits the string based on white spaces available
-		var firstName = strings.Fields(name)
-		firstNames = append(firstNames, firstName[0])
+		// // stings module has a method called Fields
+		// // It splits the string based on white spaces available
+		// var firstName = strings.Fields(booking)
+
+		firstNames = append(firstNames, booking["firstName"])
 	}
 
 	return firstNames
