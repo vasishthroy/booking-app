@@ -3,6 +3,8 @@ package main
 import (
 	"booking-app/helper"
 	"fmt"
+	"sync"
+	"time"
 )
 
 // Declaring variables outside the main function
@@ -41,6 +43,8 @@ type userDetails struct {
 	numberOfTickets uint
 }
 
+var wg = sync.WaitGroup{}
+
 func main() {
 
 	greetUser()
@@ -64,7 +68,8 @@ func main() {
 
 			bookTickets(firstName, lastName, emailAddress, userTickets)
 
-			sendEmail(firstName, lastName, emailAddress, userTickets)
+			wg.Add(1)
+			go sendEmail(firstName, lastName, emailAddress, userTickets)
 
 			var firstNames []string
 			firstNames = getFirstNames(firstNames)
@@ -93,6 +98,7 @@ func main() {
 			continue
 		}
 	}
+	wg.Wait()
 }
 
 func greetUser() {
@@ -218,10 +224,11 @@ func getFirstNames(firstNames []string) []string {
 }
 
 func sendEmail(firstName string, lastName string, emailId string, userTicket int) {
+	time.Sleep(20 * time.Second)
 	var ticket = fmt.Sprintf("Ticket for %v %v\nTotal Tickets: %v", firstName, lastName, userTicket)
 	fmt.Printf("Email sent to %v\n", emailId)
 	fmt.Println("####################################")
 	fmt.Printf("%v\n", ticket)
 	fmt.Println("####################################")
-
+	wg.Done()
 }
