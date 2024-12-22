@@ -3,7 +3,6 @@ package main
 import (
 	"booking-app/helper"
 	"fmt"
-	"strconv"
 )
 
 // Declaring variables outside the main function
@@ -33,7 +32,14 @@ var remainingTickets uint = conferenceTickets
 // Example of simple slice of string dtype
 // var bookings []string
 // TODO add Descriptive comments for MAPs
-var bookings = make([]map[string]string, 0)
+var bookings = make([]userDetails, 0)
+
+type userDetails struct {
+	firstName       string
+	lastName        string
+	email           string
+	numberOfTickets uint
+}
 
 func main() {
 
@@ -57,6 +63,8 @@ func main() {
 		if isValidName && isValidEmail && isValidTicketNumber {
 
 			bookTickets(firstName, lastName, emailAddress, userTickets)
+
+			sendEmail(firstName, lastName, emailAddress, userTickets)
 
 			var firstNames []string
 			firstNames = getFirstNames(firstNames)
@@ -150,13 +158,17 @@ func bookTickets(firstName string, lastName string, emailId string, userTickets 
 
 	remainingTickets = remainingTickets - uint(userTickets)
 
-	userData := make(map[string]string)
-
-	userData["firstName"] = firstName
-	userData["lastName"] = lastName
-	userData["email"] = emailId
-
-	userData["ticketBooked"] = strconv.Itoa(userTickets)
+	// var userData = userDetails{
+	// 	firstName:       firstName,
+	// 	lastName:        lastName,
+	// 	email:           emailId,
+	// 	numberOfTickets: uint(userTickets),
+	// }
+	var userData userDetails
+	userData.firstName = firstName
+	userData.lastName = lastName
+	userData.email = emailId
+	userData.numberOfTickets = uint(userTickets)
 
 	// bookings[0] = firstName + " " + lastName
 	// Slice uses the built-in append function to append data to it
@@ -199,8 +211,17 @@ func getFirstNames(firstNames []string) []string {
 		// // It splits the string based on white spaces available
 		// var firstName = strings.Fields(booking)
 
-		firstNames = append(firstNames, booking["firstName"])
+		firstNames = append(firstNames, booking.firstName)
 	}
 
 	return firstNames
+}
+
+func sendEmail(firstName string, lastName string, emailId string, userTicket int) {
+	var ticket = fmt.Sprintf("Ticket for %v %v\nTotal Tickets: %v", firstName, lastName, userTicket)
+	fmt.Printf("Email sent to %v\n", emailId)
+	fmt.Println("####################################")
+	fmt.Printf("%v\n", ticket)
+	fmt.Println("####################################")
+
 }
