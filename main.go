@@ -33,9 +33,12 @@ var remainingTickets uint = conferenceTickets
 // based on the amount of value being stored
 // Example of simple slice of string dtype
 // var bookings []string
-// TODO add Descriptive comments for MAPs
+// General syntax for declaring a slice would be
+// var sliceName []datatype
 var bookings = make([]userDetails, 0)
 
+// Structure allows one to create a custom data type
+// This data type can be used across the script
 type userDetails struct {
 	firstName       string
 	lastName        string
@@ -164,12 +167,17 @@ func bookTickets(firstName string, lastName string, emailId string, userTickets 
 
 	remainingTickets = remainingTickets - uint(userTickets)
 
+	// variable userData is declared of type userDetails
+	// A custom variable can be declared in two ways
+	// First way
 	// var userData = userDetails{
 	// 	firstName:       firstName,
 	// 	lastName:        lastName,
 	// 	email:           emailId,
 	// 	numberOfTickets: uint(userTickets),
 	// }
+	// A property of a structure can be accessed by dot walking
+	// Second way
 	var userData userDetails
 	userData.firstName = firstName
 	userData.lastName = lastName
@@ -224,6 +232,16 @@ func getFirstNames(firstNames []string) []string {
 }
 
 func sendEmail(firstName string, lastName string, emailId string, userTicket int) {
+	/*
+		A dummy function to simulate email sending
+		This function takes 20 seconds for completion
+		Arguments:
+			firstName (string): First Name of the user
+			lastName (string): Last Name of the user
+			emailId (string): Email of the user
+			userTickets (int): No. of tickets the user wants to book.
+		This function doesn't return any value.
+	*/
 	time.Sleep(20 * time.Second)
 	var ticket = fmt.Sprintf("Ticket for %v %v\nTotal Tickets: %v", firstName, lastName, userTicket)
 	fmt.Printf("Email sent to %v\n", emailId)
